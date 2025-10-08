@@ -21,6 +21,15 @@ export default function ReleaseNotesPage() {
       ],
     },
     {
+      version: "1.0.1",
+      date: "2025-10-04",
+      type: "Basic Template - Bug Fixes",
+      status: "Released",
+      changes: [
+        "Refactored the template API as the new foundation for later templates."
+      ],
+    },
+    {
       version: "1.1.0",
       date: "Coming Soon",
       type: "Intermediate Template",
