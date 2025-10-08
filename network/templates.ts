@@ -1,9 +1,8 @@
 export type GenerateTemplateRequest = {
   projectName: string
   packageName: string
-  networkClientType: string
-  dependencyInjectionType: string
-  compileTime: string
+  dependencyList: string[]
+  compilerType: "kapt" | "ksp"
 }
 
 export type GenerateTemplateResponse = {

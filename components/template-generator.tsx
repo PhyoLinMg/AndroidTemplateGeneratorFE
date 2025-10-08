@@ -118,12 +118,18 @@ export function TemplateGenerator() {
     setIsGenerating(true)
     
     try {
+      const dependencyList: string[] = [
+        dependencyInjectionType.toLowerCase(),
+        networkClientType.toLowerCase(),
+        ...(features.coroutines ? ["coroutines"] : []),
+        ...(features.viewModel ? ["viewmodel"] : []),
+      ]
+
       const { blob, filename, status } = await generateTemplate({
         projectName: projectName.trim(),
         packageName: packageName.trim(),
-        networkClientType,
-        dependencyInjectionType,
-        compileTime
+        dependencyList,
+        compilerType: compileTime.toLowerCase() as "kapt" | "ksp",
       })
 
       // The generateTemplate function now throws errors for non-2xx responses
