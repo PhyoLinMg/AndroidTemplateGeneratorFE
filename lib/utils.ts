@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from 'clsx'
 import { Code2, Layers, Rocket } from 'lucide-react'
+import { Children } from 'react'
 import { twMerge } from 'tailwind-merge'
 
 export function cn(...inputs: ClassValue[]) {
@@ -80,7 +81,7 @@ export const templates = {
   },
   intermediate: {
     title: "Intermediate",
-    description: "Organized MVVM structure with navigation and dependency injection",
+    description: "Clean Architecture with organized layers for maintainable and scalable apps",
     icon: Layers,
     structure: {
       name: "MyAndroidApp",
@@ -115,82 +116,19 @@ export const templates = {
                                   type: "folder",
                                   children: [
                                     {
-                                      name: "ui",
+                                      name: "navigation",
                                       type: "folder",
                                       children: [
-                                        {
-                                          name: "home",
-                                          type: "folder",
-                                          children: [
-                                            { name: "HomeFragment.kt", type: "file" },
-                                            { name: "HomeViewModel.kt", type: "file" },
-                                          ],
-                                        },
-                                        {
-                                          name: "profile",
-                                          type: "folder",
-                                          children: [
-                                            { name: "ProfileFragment.kt", type: "file" },
-                                            { name: "ProfileViewModel.kt", type: "file" },
-                                          ],
-                                        },
+                                        { name: "AppNavHost.kt", type: "file" }
                                       ],
                                     },
-                                    {
-                                      name: "data",
-                                      type: "folder",
-                                      children: [
-                                        {
-                                          name: "repository",
-                                          type: "folder",
-                                          children: [{ name: "UserRepository.kt", type: "file" }],
-                                        },
-                                        {
-                                          name: "model",
-                                          type: "folder",
-                                          children: [{ name: "User.kt", type: "file" }],
-                                        },
-                                      ],
-                                    },
-                                    {
-                                      name: "di",
-                                      type: "folder",
-                                      children: [{ name: "AppModule.kt", type: "file" }],
-                                    },
+
                                     { name: "MainActivity.kt", type: "file" },
+                                    { name: "MyApplication.kt", type: "file" },
                                   ],
                                 },
                               ],
                             },
-                          ],
-                        },
-                      ],
-                    },
-                    {
-                      name: "res",
-                      type: "folder",
-                      children: [
-                        {
-                          name: "layout",
-                          type: "folder",
-                          children: [
-                            { name: "activity_main.xml", type: "file" },
-                            { name: "fragment_home.xml", type: "file" },
-                            { name: "fragment_profile.xml", type: "file" },
-                          ],
-                        },
-                        {
-                          name: "navigation",
-                          type: "folder",
-                          children: [{ name: "nav_graph.xml", type: "file" }],
-                        },
-                        {
-                          name: "values",
-                          type: "folder",
-                          children: [
-                            { name: "strings.xml", type: "file" },
-                            { name: "colors.xml", type: "file" },
-                            { name: "themes.xml", type: "file" },
                           ],
                         },
                       ],
@@ -203,8 +141,146 @@ export const templates = {
             { name: "build.gradle.kts", type: "file" },
           ],
         },
+        {
+          name: "core",
+          type: "folder",
+          children: [
+            {
+              name: "src",
+              type: "folder",
+              children: [
+                {
+                  name: "main",
+                  type: "folder",
+                  children: [
+                    {
+                      name: "java",
+                      type: "folder",
+                      children: [
+                        {
+                          name: "com.example.myapp.core", type: "folder", children: [
+                            {
+                              name: "network",
+                              type: "folder",
+                              children: [
+                                { name: "ApiService.kt", type: "file" },
+                                { name: "NetworkModule.kt", type: "file" },
+                                { name: "ApiResponse.kt", type: "file" },
+                              ],
+                            },
+                            {
+                              name: "ui",
+                              type: "folder",
+                              children: [
+                                { name: "Theme.kt", type: "file" },
+                                { name: "Typography.kt", type: "file" },
+                              ],
+                            },
+                            {
+                              name: "utils",
+                              type: "folder",
+                              children: [
+                                { name: "UiText.kt", type: "file" },
+                              ],
+                            },
+                          ]
+                        }
+                      ],
+                    },
+                    { name: "AndroidManifest.xml", type: "file" }
+                  ],
+                },
+                { name: "build.gradle.kts", type: "file" },
+              ],
+            },
+          ],
+        },
+        {
+          name: "data",
+          type: "folder",
+          children: [
+            {
+              name: "src", type: "folder", children: [
+                {
+                  name: "main", type: "folder", children: [
+                    {
+                      name: "java", type: "folder", children: [
+                        {
+                          name: "com.example.myapp.data", type: "folder", children: [
+                            {
+                              name: "dto", type: "folder", children: [
+                                { name: "local", type: "folder", children: [{ name: "LocalEntity.kt", type: "file" }] },
+                                { name: "remote", type: "folder", children: [{ name: "RemoteResponse.kt", type: "file" }] }
+                              ]
+                            },
+                            { name: "local", type: "folder", children: [{ name: "LocalDatabase.kt", type: "file" }, { name: "dao", type: "folder", children: [{ name: "LocalDao.kt", type: "file" }] }] },
+                            { name: "remote", type: "folder", children: [
+                              {name:"RemoteDataSource.kt", type: "file"}
+                            ] },
+                            { name: "repository", type: "folder", children: [{name: "ExampleRepositoryImpl.kt", type: "file"}] }
+                          ]
+                        },
+                        {name: "AndroidManifest.xml", type: "file"}
+                      ]
+                    }
+                  ]
+                },
+                {name: "build.gradle.kts", type:"file"}
+              ]
+            }
+          ]
+        },
+        {
+          name: "domain",
+          type: "folder",
+          children: [
+            
+              {name:"src", type: "folder", children: [
+                {name:"main", type: "folder", children: [
+                  {name:"com.example.myapp.domain", type: "folder", children: [
+                    {name:"model", type: "folder", children: [
+                      {name:"ExampleModel.kt", type: "file"},
+                    ]},
+                    {name:"repository", type: "folder", children: [{name:"ExampleRepository.kt", type: "file"},]}
+                  ]}
+                ]}
+              ]},
+              {name: "build.gradle.kts", type: "file"}
+            
+          ]
+        },
+        {
+          name: "feature",
+          type: "folder",
+          children: [
+            {
+              name: "home",
+              type: "folder",
+              children: [
+                {name: "src", type:"folder", children:[
+                  {name: "main", type:"folder", children:[
+                    {name: "java", type:"folder", children:[
+                      {name: "com.example.myapp.feature.home", type:"folder", children:[
+                        {name: "navigation", type:"folder", children:[
+                          {name:"HomeNavGraph.kt", type:"file"},
+                        ]},
+                        {name: "presentation", type:"folder", children:[
+                          {name:"HomeScreen.kt", type:"file"},
+                          {name:"HomeViewModel.kt", type:"file"},
+                        ]}
+                      ]}
+                    ]}
+                  ]},
+                  {name: "AndroidManifest.xml", type: "file"}
+                ]},
+                {name:"build.gradle.kts", type: "file"}
+              ]
+            }
+          ]
+        },
         { name: "build.gradle.kts", type: "file" },
         { name: "settings.gradle.kts", type: "file" },
+        { name: "gradle.properties", type: "file" },
         { name: ".gitignore", type: "file" },
       ],
     },

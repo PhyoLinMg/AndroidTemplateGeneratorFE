@@ -49,7 +49,7 @@ export function TemplateGenerator() {
 
   const templateStatus = {
     basic: { available: true, status: "Released" },
-    intermediate: { available: false, status: "Coming Soon" },
+    intermediate: { available: true, status: "Coming Soon" },
     advanced: { available: false, status: "Planned" },
   }
   const toggleFeature = (feature: keyof typeof features) => {
