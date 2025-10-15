@@ -31,16 +31,17 @@ export default function ReleaseNotesPage() {
     },
     {
       version: "1.1.0",
-      date: "Coming Soon",
+      date: "2025-10-15",
       type: "Intermediate Template",
-      status: "In Development",
+      status: "Released",
       changes: [
         "MVVM architecture implementation",
         "Navigation Component integration",
-
+        "Integrated Modularization",
         "Repository pattern for data management",
         "ViewModel with LiveData/StateFlow",
         "Multiple screens with navigation graph",
+        "Room, Hilt, Retrofit added for library support"
       ],
     },
     {

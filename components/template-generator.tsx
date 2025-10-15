@@ -1,10 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { FolderTree } from "@/components/folder-tree"
-import { Code2, Layers, Rocket, Lock } from "lucide-react"
+import { Code2, Layers, Rocket, Lock, Flashlight } from "lucide-react"
 import {
   Dialog,
   DialogContent,
@@ -47,6 +47,7 @@ export function TemplateGenerator() {
     navigation: false,
     chucker: false,
     timber: false,
+    glide: false,
   })
 
   const templateStatus = {
@@ -57,6 +58,21 @@ export function TemplateGenerator() {
   const toggleFeature = (feature: keyof typeof features) => {
     setFeatures((prev) => ({ ...prev, [feature]: !prev[feature] }))
   }
+
+  // Update features based on selected template
+  useEffect(() => {
+    if (selectedTemplate === "basic") {
+      setFeatures(prev => ({
+        ...prev,
+        navigation: false
+      }))
+    } else{    
+      setFeatures(prev => ({
+        ...prev,
+        navigation: true
+      }))
+    }
+  }, [selectedTemplate])
 
   const validateInputs = (): boolean => {
     const errors: { projectName?: string; packageName?: string } = {}
@@ -127,6 +143,9 @@ export function TemplateGenerator() {
         ...(features.viewModel ? ["viewmodel"] : []),
         ...(features.chucker ? ["chucker"] : []),
         ...(features.timber ? ["timber"] : []),
+        ...(features.room? ["room"]:[]),
+        ...(features.navigation? ["navigation"]: []),
+        ...(features.glide ? ["glide"]:[])
       ]
 
       const { blob, filename, status } = await generateTemplate({
@@ -449,14 +468,15 @@ export function TemplateGenerator() {
                   </Label>
                 </div>
 
-                <div className="flex items-center space-x-2 py-2">
+                <div className={`flex items-center space-x-2 py-2 ${selectedTemplate === "intermediate" ? "px-4 bg-muted rounded-lg" : ""}`}>
                   <Checkbox
                     id="navigation"
                     checked={features.navigation}
+                    disabled={selectedTemplate === "intermediate"}
                     onCheckedChange={() => toggleFeature("navigation")}
                   />
-                  <Label htmlFor="navigation" className="cursor-pointer">
-                    Navigation Component
+                  <Label htmlFor="navigation" className={selectedTemplate === "intermediate" ? "cursor-default" : "cursor-pointer"}>
+                    Navigation Component{selectedTemplate === "intermediate" ? " (Default)" : ""}
                   </Label>
                 </div>
 
@@ -470,7 +490,16 @@ export function TemplateGenerator() {
                     Chucker (Network Inspector)
                   </Label>
                 </div>
-
+                <div className="flex items-center space-x-2 py-2">
+                  <Checkbox
+                    id="glide"
+                    checked={features.glide}
+                    onCheckedChange={() => toggleFeature("glide")}
+                  />
+                  <Label htmlFor="glide" className="cursor-pointer">
+                    Glide
+                  </Label>
+                </div>
                 <div className="flex items-center space-x-2 py-2">
                   <Checkbox
                     id="timber"
