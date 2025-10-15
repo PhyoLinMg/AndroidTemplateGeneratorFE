@@ -81,7 +81,7 @@ export const templates = {
   },
   intermediate: {
     title: "Intermediate",
-    description: "Clean Architecture with organized layers for maintainable and scalable apps",
+    description: "Clean Architecture with organized modules for maintainable and scalable apps",
     icon: Layers,
     structure: {
       name: "MyAndroidApp",
