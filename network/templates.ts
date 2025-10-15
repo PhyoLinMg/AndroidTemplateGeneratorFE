@@ -25,8 +25,8 @@ export class TemplateGenerationError extends Error {
   }
 }
 
-export async function generateTemplate(payload: GenerateTemplateRequest): Promise<GenerateTemplateResponse> {
-  const url = `${API_BASE_URL}/api/templates/basic/generate`
+export async function generateTemplate(payload: GenerateTemplateRequest, grade:String): Promise<GenerateTemplateResponse> {
+  const url = `${API_BASE_URL}/api/templates/${grade}/generate`
 
   try {
     const response = await fetch(url, {

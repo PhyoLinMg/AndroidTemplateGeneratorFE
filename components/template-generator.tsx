@@ -1,10 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { FolderTree } from "@/components/folder-tree"
-import { Code2, Layers, Rocket, Lock } from "lucide-react"
+import { Code2, Layers, Rocket, Lock, Flashlight } from "lucide-react"
 import {
   Dialog,
   DialogContent,
@@ -45,16 +45,34 @@ export function TemplateGenerator() {
     coroutines: true,
     room: false,
     navigation: false,
+    chucker: false,
+    timber: false,
+    glide: false,
   })
 
   const templateStatus = {
     basic: { available: true, status: "Released" },
-    intermediate: { available: false, status: "Coming Soon" },
-    advanced: { available: false, status: "Planned" },
+    intermediate: { available: true, status: "Released" },
+    advanced: { available: false, status: "Coming Soon" },
   }
   const toggleFeature = (feature: keyof typeof features) => {
     setFeatures((prev) => ({ ...prev, [feature]: !prev[feature] }))
   }
+
+  // Update features based on selected template
+  useEffect(() => {
+    if (selectedTemplate === "basic") {
+      setFeatures(prev => ({
+        ...prev,
+        navigation: false
+      }))
+    } else{    
+      setFeatures(prev => ({
+        ...prev,
+        navigation: true
+      }))
+    }
+  }, [selectedTemplate])
 
   const validateInputs = (): boolean => {
     const errors: { projectName?: string; packageName?: string } = {}
@@ -123,6 +141,11 @@ export function TemplateGenerator() {
         networkClientType.toLowerCase(),
         ...(features.coroutines ? ["coroutines"] : []),
         ...(features.viewModel ? ["viewmodel"] : []),
+        ...(features.chucker ? ["chucker"] : []),
+        ...(features.timber ? ["timber"] : []),
+        ...(features.room? ["room"]:[]),
+        ...(features.navigation? ["navigation"]: []),
+        ...(features.glide ? ["glide"]:[])
       ]
 
       const { blob, filename, status } = await generateTemplate({
@@ -130,7 +153,7 @@ export function TemplateGenerator() {
         packageName: packageName.trim(),
         dependencyList,
         compilerType: compileTime.toLowerCase() as "kapt" | "ksp",
-      })
+      },selectedTemplate)
 
       // The generateTemplate function now throws errors for non-2xx responses
       // If we reach here, the response was successful
@@ -207,8 +230,8 @@ export function TemplateGenerator() {
           structure and architectural complexity.
         </p>
         <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-muted rounded-lg">
-          <Badge variant="default">Basic Released</Badge>
-          <span className="text-sm text-muted-foreground">Intermediate & Advanced coming soon</span>
+          <Badge variant="default">Basic & Intermediate Released</Badge>
+          <span className="text-sm text-muted-foreground">Advanced coming soon</span>
         </div>
       </div>
 
@@ -430,7 +453,7 @@ export function TemplateGenerator() {
                   </Label>
                 </div>
 
-                <div className="flex items-center space-x-2 px-4 py-2 bg-muted rounded-lg">
+                <div className="flex items-center space-x-2 px-4 py-3 bg-muted rounded-lg">
                   <Checkbox id="coroutines" checked={features.coroutines} disabled />
                   <Label htmlFor="coroutines" className="cursor-default">
                     Kotlin Coroutines (Default)
@@ -438,23 +461,55 @@ export function TemplateGenerator() {
                 </div>
 
                 {/* Optional libraries */}
-                {/* <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 py-2">
                   <Checkbox id="room" checked={features.room} onCheckedChange={() => toggleFeature("room")} />
                   <Label htmlFor="room" className="cursor-pointer">
                     Room Database
                   </Label>
-                </div> */}
+                </div>
 
-                {/* <div className="flex items-center space-x-2">
+                <div className={`flex items-center space-x-2 py-2 ${selectedTemplate === "intermediate" ? "px-4 bg-muted rounded-lg" : ""}`}>
                   <Checkbox
                     id="navigation"
                     checked={features.navigation}
+                    disabled={selectedTemplate === "intermediate"}
                     onCheckedChange={() => toggleFeature("navigation")}
                   />
-                  <Label htmlFor="navigation" className="cursor-pointer">
-                    Navigation Component
+                  <Label htmlFor="navigation" className={selectedTemplate === "intermediate" ? "cursor-default" : "cursor-pointer"}>
+                    Navigation Component{selectedTemplate === "intermediate" ? " (Default)" : ""}
                   </Label>
-                </div> */}
+                </div>
+
+                <div className="flex items-center space-x-2 py-2">
+                  <Checkbox
+                    id="chucker"
+                    checked={features.chucker}
+                    onCheckedChange={() => toggleFeature("chucker")}
+                  />
+                  <Label htmlFor="chucker" className="cursor-pointer">
+                    Chucker (Network Inspector)
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2 py-2">
+                  <Checkbox
+                    id="glide"
+                    checked={features.glide}
+                    onCheckedChange={() => toggleFeature("glide")}
+                  />
+                  <Label htmlFor="glide" className="cursor-pointer">
+                    Glide
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2 py-2">
+                  <Checkbox
+                    id="timber"
+                    checked={features.timber}
+                    onCheckedChange={() => toggleFeature("timber")}
+                  />
+                  <Label htmlFor="timber" className="cursor-pointer">
+                    Timber (Logging)
+                  </Label>
+                </div>
               </div>
             </div>
           </div>
