@@ -287,7 +287,7 @@ export const templates = {
   },
   advanced: {
     title: "Advanced",
-    description: "Enterprise-ready Clean Architecture with testing, CI/CD, and modularization",
+    description: "Enterprise-ready Android framework inspired by Now in Android, built for scalability, modularity, and production-grade app development.",
     icon: Rocket,
     structure: {
       name: "MyAndroidApp",
