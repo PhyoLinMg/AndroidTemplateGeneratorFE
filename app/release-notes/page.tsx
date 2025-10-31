@@ -46,16 +46,15 @@ export default function ReleaseNotesPage() {
     },
     {
       version: "1.2.0",
-      date: "Planned",
+      date: "In Progress",
       type: "Advanced Template",
       status: "Planned",
       changes: [
-        "Clean Architecture with multi-module structure",
+        "Enterprise-level modular app architecture (multi-module, scalable structure)",
+        "Clean Architecture+ MVVM+ Repository pattern",
         "Domain, Data, and Feature modules",
-        "Use case implementation",
-        "Unit and instrumentation test setup",
-        "CI/CD workflow with GitHub Actions",
-        "ProGuard rules and code optimization",
+        "Build Logic Implementation",
+        "Room, Hilt, Retrofit and others for Library support"
       ],
     },
   ]

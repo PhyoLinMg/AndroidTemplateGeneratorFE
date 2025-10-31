@@ -109,7 +109,7 @@ export default function SupportPage() {
                 <div>
                   <h4 className="font-semibold mb-1">Customize Your Project</h4>
                   <p className="text-sm text-muted-foreground">
-                    Click "Customize" to configure project name, package name, SDK versions, and select the libraries
+                    Click "Customize" to configure project name, package name and select the libraries
                     you need.
                   </p>
                 </div>
