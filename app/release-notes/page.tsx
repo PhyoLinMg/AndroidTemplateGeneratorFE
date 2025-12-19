@@ -44,19 +44,6 @@ export default function ReleaseNotesPage() {
         "Room, Hilt, Retrofit added for library support"
       ],
     },
-    {
-      version: "1.2.0",
-      date: "In Progress",
-      type: "Advanced Template",
-      status: "Planned",
-      changes: [
-        "Enterprise-level modular app architecture (multi-module, scalable structure)",
-        "Clean Architecture+ MVVM+ Repository pattern",
-        "Domain, Data, and Feature modules",
-        "Build Logic Implementation",
-        "Room, Hilt, Retrofit and others for Library support"
-      ],
-    },
   ]
 
   return (
