@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { FolderTree } from "@/components/folder-tree"
-import { Code2, Layers, Rocket, Lock, Flashlight } from "lucide-react"
+import { Code2, Layers, Rocket, Lock, Flashlight, Sparkles, CheckCircle2 } from "lucide-react"
 import {
   Dialog,
   DialogContent,
@@ -21,7 +21,7 @@ import { templates } from "@/lib/utils"
 import { generateTemplate, downloadBlob, TemplateGenerationError } from "@/network/templates"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
-type TemplateType = "basic" | "intermediate" | "advanced" | null
+type TemplateType = "basic" | "intermediate" | null
 
 export function TemplateGenerator() {
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateType>(null)
@@ -53,7 +53,6 @@ export function TemplateGenerator() {
   const templateStatus = {
     basic: { available: true, status: "Released" },
     intermediate: { available: true, status: "Released" },
-    advanced: { available: false, status: "Coming Soon" },
   }
   const toggleFeature = (feature: keyof typeof features) => {
     setFeatures((prev) => ({ ...prev, [feature]: !prev[feature] }))
@@ -66,7 +65,7 @@ export function TemplateGenerator() {
         ...prev,
         navigation: false
       }))
-    } else{    
+    } else {
       setFeatures(prev => ({
         ...prev,
         navigation: true
@@ -134,7 +133,7 @@ export function TemplateGenerator() {
     }
 
     setIsGenerating(true)
-    
+
     try {
       const dependencyList: string[] = [
         dependencyInjectionType.toLowerCase(),
@@ -143,9 +142,9 @@ export function TemplateGenerator() {
         ...(features.viewModel ? ["viewmodel"] : []),
         ...(features.chucker ? ["chucker"] : []),
         ...(features.timber ? ["timber"] : []),
-        ...(features.room? ["room"]:[]),
-        ...(features.navigation? ["navigation"]: []),
-        ...(features.glide ? ["glide"]:[])
+        ...(features.room ? ["room"] : []),
+        ...(features.navigation ? ["navigation"] : []),
+        ...(features.glide ? ["glide"] : [])
       ]
 
       const { blob, filename, status } = await generateTemplate({
@@ -153,19 +152,19 @@ export function TemplateGenerator() {
         packageName: packageName.trim(),
         dependencyList,
         compilerType: compileTime.toLowerCase() as "kapt" | "ksp",
-      },selectedTemplate)
+      }, selectedTemplate)
 
       // The generateTemplate function now throws errors for non-2xx responses
       // If we reach here, the response was successful
       await downloadBlob(blob, filename || `${projectName.trim()}.zip`)
       setIsDialogOpen(false)
-      
+
       // Show success message (optional - you might want to add a toast notification)
       console.log("Template generated and downloaded successfully")
-      
+
     } catch (error) {
       console.error("Failed to generate template:", error)
-      
+
       if (error instanceof TemplateGenerationError) {
         // Handle specific error types with appropriate user messages
         switch (error.code) {
@@ -198,401 +197,411 @@ export function TemplateGenerator() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-    {/* Header */}
-    <header className="border-b border-border bg-card">
-      <div className="container mx-auto px-4 py-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
-              <Code2 className="h-6 w-6 text-primary-foreground" />
+    <div className="min-h-screen bg-white">
+      {/* Header */}
+      <header className="border-b border-border bg-card">
+        <div className="container mx-auto px-4 py-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
+                <Code2 className="h-6 w-6 text-primary-foreground" />
+              </div>
+              <h1 className="text-2xl font-bold text-balance">Android Template Generator</h1>
             </div>
-            <h1 className="text-2xl font-bold text-balance">Android Template Generator</h1>
+            <nav className="hidden md:flex items-center gap-6 text-sm">
+              <a href="/release-notes" className="text-muted-foreground hover:text-foreground transition-colors">
+                Release Notes
+              </a>
+              <a href="/support" className="text-muted-foreground hover:text-foreground transition-colors">
+                Support
+              </a>
+            </nav>
           </div>
-          <nav className="hidden md:flex items-center gap-6 text-sm">
-            <a href="/release-notes" className="text-muted-foreground hover:text-foreground transition-colors">
-              Release Notes
-            </a>
-            <a href="/support" className="text-muted-foreground hover:text-foreground transition-colors">
-              Support
-            </a>
-          </nav>
         </div>
-      </div>
-    </header>
+      </header>
 
-    {/* Main Content */}
-    <main className="container mx-auto px-4 py-12">
-      <div className="mb-12 text-center">
-        <h2 className="text-4xl font-bold mb-4 text-balance">Choose Your Android Template</h2>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-pretty">
-          Select a template that matches your Android project needs. Each template provides a different level of
-          structure and architectural complexity.
-        </p>
-        <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-muted rounded-lg">
-          <Badge variant="default">Basic & Intermediate Released</Badge>
-          <span className="text-sm text-muted-foreground">Advanced coming soon</span>
+      {/* Main Content */}
+      <main className="container mx-auto px-6 py-12">
+        <div className="mb-16 max-w-3xl">
+          <div className="inline-flex items-center gap-2 mb-6 px-3 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-medium">
+            <Sparkles className="h-4 w-4" />
+            <span>Start building in seconds</span>
+          </div>
+          <h2 className="text-5xl font-bold mb-6 tracking-tight text-balance leading-tight">
+            Kickstart your Android project
+          </h2>
+          <p className="text-xl text-muted-foreground text-pretty leading-relaxed">
+            Choose from professionally crafted templates with modern architecture patterns. Each template provides a
+            solid foundation with best practices built in.
+          </p>
         </div>
-      </div>
 
-      {/* Template Selection Cards */}
-      <div className="grid md:grid-cols-3 gap-6 mb-12">
-        {(Object.keys(templates) as TemplateType[]).map((key) => {
-          if (!key) return null
-          const template = templates[key]
-          const Icon = template.icon
-          const isSelected = selectedTemplate === key
-          const status = templateStatus[key]
-          const isAvailable = status.available
+        {/* Template Selection Cards */}
+        <div className="grid md:grid-cols-2 gap-6 mb-12">
+          {(Object.keys(templates) as TemplateType[]).map((key) => {
+            if (!key) return null
+            const template = templates[key]
+            const Icon = template.icon
+            const isSelected = selectedTemplate === key
+            const status = templateStatus[key]
+            const isAvailable = status.available
 
-          return (
-            <Card
-              key={key}
-              className={`cursor-pointer transition-all hover:shadow-lg ${
-                isSelected ? "ring-2 ring-primary shadow-lg" : ""
-              } ${!isAvailable ? "opacity-60" : ""}`}
-              onClick={() => isAvailable && setSelectedTemplate(key)}
-            >
-              <CardHeader>
-                <div className="flex items-center gap-3 mb-2">
-                  <div
-                    className={`flex h-12 w-12 items-center justify-center rounded-lg ${
-                      isSelected ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
-                    }`}
-                  >
-                    {!isAvailable ? <Lock className="h-6 w-6" /> : <Icon className="h-6 w-6" />}
-                  </div>
-                  <div className="flex-1">
-                    <CardTitle className="text-xl">{template.title}</CardTitle>
-                    <Badge variant={isAvailable ? "default" : "secondary"} className="mt-1">
+            return (
+              <Card
+                key={key}
+                className={`cursor-pointer transition-all hover:shadow-lg h-full flex flex-col ${isSelected ? "border-green-500 ring-1 ring-green-500 shadow-md" : ""
+                  } ${!isAvailable ? "opacity-60" : ""}`}
+                onClick={() => isAvailable && setSelectedTemplate(key)}
+              >
+                <CardHeader className="flex-1">
+                  <div className="flex justify-between items-start mb-4">
+                    <div
+                      className={`flex h-12 w-12 items-center justify-center rounded-xl transition-colors ${isSelected ? "bg-green-500 text-white" : "bg-muted text-foreground"
+                        }`}
+                    >
+                      {!isAvailable ? <Lock className="h-6 w-6" /> : <Icon className="h-6 w-6" />}
+                    </div>
+                    <Badge
+                      variant="secondary"
+                      className={`font-medium ${isSelected ? "bg-green-500 text-white hover:bg-green-600" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}
+                    >
                       {status.status}
                     </Badge>
                   </div>
-                </div>
-                <CardDescription className="text-pretty">{template.description}</CardDescription>
+                  <CardTitle className="text-2xl mb-2">{template.title}</CardTitle>
+                  <CardDescription className="text-base leading-relaxed">{template.description}</CardDescription>
+                </CardHeader>
+                <CardContent className="mt-auto">
+                  <Button
+                    className={`w-full h-11 text-base ${isSelected ? "bg-green-500 hover:bg-green-600 text-white" : ""}`}
+                    variant={isSelected ? "default" : "outline"}
+                    disabled={!isAvailable}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      if (isAvailable) setSelectedTemplate(key)
+                    }}
+                  >
+                    {!isAvailable ? (
+                      status.status
+                    ) : isSelected ? (
+                      <>
+                        <CheckCircle2 className="mr-2 h-5 w-5" />
+                        Selected
+                      </>
+                    ) : (
+                      "View Template"
+                    )}
+                  </Button>
+                </CardContent>
+              </Card>
+            )
+          })}
+        </div>
+
+        {/* Folder Structure Visualization */}
+        {selectedTemplate && (
+          <div className="max-w-4xl mx-auto">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-2xl">Project Structure</CardTitle>
+                <CardDescription>
+                  Preview the folder structure for the {templates[selectedTemplate].title.toLowerCase()} template
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button
-                  className="w-full"
-                  variant={isSelected ? "default" : "outline"}
-                  disabled={!isAvailable}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    if (isAvailable) setSelectedTemplate(key)
-                  }}
-                >
-                  {!isAvailable ? status.status : isSelected ? "Selected" : "Select Template"}
-                </Button>
-              </CardContent>
-            </Card>
-          )
-        })}
-      </div>
-
-      {/* Folder Structure Visualization */}
-      {selectedTemplate && (
-        <div className="max-w-4xl mx-auto">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl">Project Structure</CardTitle>
-              <CardDescription>
-                Preview the folder structure for the {templates[selectedTemplate].title.toLowerCase()} template
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="bg-muted rounded-lg p-6 font-mono text-sm">
-                <FolderTree node={templates[selectedTemplate].structure} />
-              </div>
-              <div className="mt-6">
-                <Button className="w-full" size="lg" onClick={() => setIsDialogOpen(true)} disabled={false}>
-                  Generate Project
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
-    </main>
-
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Customize Your Android Project</DialogTitle>
-          <DialogDescription>
-            Configure your project settings and select the features you want to include.
-          </DialogDescription>
-        </DialogHeader>
-
-        <div className="space-y-6 py-4">
-          {/* Project Details Section */}
-          <div className="space-y-4">
-            <h3 className="font-semibold text-lg">Project Details</h3>
-
-            <div className="space-y-2">
-              <Label htmlFor="projectName">Project Name</Label>
-              <Input
-                id="projectName"
-                value={projectName}
-                onChange={(e) => {
-                  setProjectName(e.target.value)
-                  // Clear validation error when user starts typing
-                  if (validationErrors.projectName) {
-                    setValidationErrors(prev => ({ ...prev, projectName: undefined }))
-                  }
-                }}
-                placeholder="MyAndroidApp"
-                className={validationErrors.projectName ? "border-destructive" : ""}
-              />
-              {validationErrors.projectName && (
-                <p className="text-sm text-destructive">{validationErrors.projectName}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="packageName">Package Name</Label>
-              <Input
-                id="packageName"
-                value={packageName}
-                onChange={(e) => {
-                  setPackageName(e.target.value)
-                  // Clear validation error when user starts typing
-                  if (validationErrors.packageName) {
-                    setValidationErrors(prev => ({ ...prev, packageName: undefined }))
-                  }
-                }}
-                placeholder="com.example.myapp"
-                className={validationErrors.packageName ? "border-destructive" : ""}
-              />
-              {validationErrors.packageName && (
-                <p className="text-sm text-destructive">{validationErrors.packageName}</p>
-              )}
-            </div>
-          </div>
-
-          {/* Features Section */}
-          <div className="space-y-4">
-            <h3 className="font-semibold text-lg">Features & Libraries</h3>
-
-            {/* UI Features - Jetpack Compose only */}
-            <div className="space-y-3">
-              <h4 className="font-medium text-sm text-muted-foreground">UI Framework</h4>
-              <div className="flex items-center space-x-2 px-4 py-3 bg-muted rounded-lg">
-                <Checkbox id="compose" checked={features.compose} disabled />
-                <Label htmlFor="compose" className="cursor-default">
-                  Jetpack Compose (Default)
-                </Label>
-              </div>
-            </div>
-
-            {/* Network - Radio Group */}
-            <div className="space-y-3">
-              <h4 className="font-medium text-sm text-muted-foreground">Network Library (Choose One)</h4>
-              <RadioGroup value={networkClientType} onValueChange={(value) => setNetworkLibrary(value as any)}>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Retrofit" id="network-retrofit" />
-                  <Label htmlFor="network-retrofit" className="cursor-pointer">
-                    Retrofit
-                  </Label>
+                <div className="bg-muted rounded-lg p-6 font-mono text-sm">
+                  <FolderTree node={templates[selectedTemplate].structure} />
                 </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Ktor" id="network-ktor" />
-                  <Label htmlFor="network-ktor" className="cursor-pointer">
-                    Ktor
-                  </Label>
-                </div>
-              </RadioGroup>
-            </div>
-
-            {/* Dependency Injection - Radio Group */}
-            <div className="space-y-3">
-              <h4 className="font-medium text-sm text-muted-foreground">Dependency Injection (Choose One)</h4>
-              <RadioGroup value={dependencyInjectionType} onValueChange={(value) => setDiLibrary(value as any)}>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Hilt" id="di-hilt" />
-                  <Label htmlFor="di-hilt" className="cursor-pointer">
-                    Hilt
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="Koin" id="di-koin" />
-                  <Label htmlFor="di-koin" className="cursor-pointer">
-                    Koin
-                  </Label>
-                </div>
-              </RadioGroup>
-            </div>
-
-            {/* Annotation Processing - Radio Group */}
-            <div className="space-y-3">
-              <h4 className="font-medium text-sm text-muted-foreground">Annotation Processing (Choose One)</h4>
-              <RadioGroup value={compileTime} onValueChange={(value) => setAnnotationProcessor(value as any)}>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="KAPT" id="compile-kapt" />
-                  <Label htmlFor="compile-kapt" className="cursor-pointer">
-                    KAPT
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="KSP" id="compile-ksp" />
-                  <Label htmlFor="compile-ksp" className="cursor-pointer">
-                    KSP
-                  </Label>
-                </div>
-              </RadioGroup>
-            </div>
-
-            {/* Other Libraries */}
-            <div className="space-y-3">
-              <h4 className="font-medium text-sm text-muted-foreground">Other Libraries</h4>
-              <div className="space-y-2">
-                {/* Default libraries - disabled checkboxes */}
-                <div className="flex items-center space-x-2 px-4 py-2 bg-muted rounded-lg">
-                  <Checkbox id="viewModel" checked={features.viewModel} disabled />
-                  <Label htmlFor="viewModel" className="cursor-default">
-                    ViewModel (Default)
-                  </Label>
-                </div>
-
-                <div className="flex items-center space-x-2 px-4 py-3 bg-muted rounded-lg">
-                  <Checkbox id="coroutines" checked={features.coroutines} disabled />
-                  <Label htmlFor="coroutines" className="cursor-default">
-                    Kotlin Coroutines (Default)
-                  </Label>
-                </div>
-
-                {/* Optional libraries */}
-                <div className="flex items-center space-x-2 py-2">
-                  <Checkbox id="room" checked={features.room} onCheckedChange={() => toggleFeature("room")} />
-                  <Label htmlFor="room" className="cursor-pointer">
-                    Room Database
-                  </Label>
-                </div>
-
-                <div className={`flex items-center space-x-2 py-2 ${selectedTemplate === "intermediate" ? "px-4 bg-muted rounded-lg" : ""}`}>
-                  <Checkbox
-                    id="navigation"
-                    checked={features.navigation}
-                    disabled={selectedTemplate === "intermediate"}
-                    onCheckedChange={() => toggleFeature("navigation")}
-                  />
-                  <Label htmlFor="navigation" className={selectedTemplate === "intermediate" ? "cursor-default" : "cursor-pointer"}>
-                    Navigation Component{selectedTemplate === "intermediate" ? " (Default)" : ""}
-                  </Label>
-                </div>
-
-                <div className="flex items-center space-x-2 py-2">
-                  <Checkbox
-                    id="chucker"
-                    checked={features.chucker}
-                    onCheckedChange={() => toggleFeature("chucker")}
-                  />
-                  <Label htmlFor="chucker" className="cursor-pointer">
-                    Chucker (Network Inspector)
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2 py-2">
-                  <Checkbox
-                    id="glide"
-                    checked={features.glide}
-                    onCheckedChange={() => toggleFeature("glide")}
-                  />
-                  <Label htmlFor="glide" className="cursor-pointer">
-                    Glide
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2 py-2">
-                  <Checkbox
-                    id="timber"
-                    checked={features.timber}
-                    onCheckedChange={() => toggleFeature("timber")}
-                  />
-                  <Label htmlFor="timber" className="cursor-pointer">
-                    Timber (Logging)
-                  </Label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <DialogFooter className="flex-col space-y-4">
-          {/* Error Message Display */}
-          {errorMessage && (
-            <div className="w-full p-3 bg-destructive/10 border border-destructive/20 rounded-md">
-              <p className="text-sm text-destructive mb-2">{errorMessage}</p>
-              {retryCount < 3 && (
-                <div className="flex items-center justify-between">
-                  <p className="text-xs text-muted-foreground">
-                    {retryCount > 0 && `Retry attempt ${retryCount}/3`}
-                  </p>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleRetry}
-                    disabled={isGenerating}
-                    className="text-xs"
-                  >
-                    {isGenerating ? "Retrying..." : "Try Again"}
+                <div className="mt-6">
+                  <Button className="w-full" size="lg" onClick={() => setIsDialogOpen(true)} disabled={false}>
+                    Generate Project
                   </Button>
                 </div>
-              )}
-            </div>
-          )}
-          
-          {/* Validation Errors Display */}
-          {(validationErrors.projectName || validationErrors.packageName) && (
-            <div className="w-full space-y-2">
-              {validationErrors.projectName && (
-                <p className="text-sm text-destructive">• {validationErrors.projectName}</p>
-              )}
-              {validationErrors.packageName && (
-                <p className="text-sm text-destructive">• {validationErrors.packageName}</p>
-              )}
-            </div>
-          )}
-          
-          <div className="flex justify-end space-x-2 w-full">
-            <Button 
-              variant="outline" 
-              onClick={() => {
-                setIsDialogOpen(false)
-                clearErrors()
-              }}
-              disabled={isGenerating}
-            >
-              Cancel
-            </Button>
-            <Button 
-              onClick={handleDownload} 
-              disabled={isGenerating}
-              className="min-w-[140px]"
-            >
-              {isGenerating ? "Generating..." : "Download Project"}
-            </Button>
+              </CardContent>
+            </Card>
           </div>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        )}
+      </main>
 
-    {/* Footer */}
-    <footer className="border-t border-border bg-muted mt-20 sticky top-[100vh]">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <p>© 2025 Android Template Generator. All rights reserved.</p>
-          <div className="flex gap-6">
-            <a href="#" className="hover:text-foreground transition-colors">
-              Terms of Service
-            </a>
-            <a href="#" className="hover:text-foreground transition-colors">
-              Privacy Policy
-            </a>
-            <a href="#" className="hover:text-foreground transition-colors">
-              Contact Us
-            </a>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Customize Your Android Project</DialogTitle>
+            <DialogDescription>
+              Configure your project settings and select the features you want to include.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-6 py-4">
+            {/* Project Details Section */}
+            <div className="space-y-4">
+              <h3 className="font-semibold text-lg">Project Details</h3>
+
+              <div className="space-y-2">
+                <Label htmlFor="projectName">Project Name</Label>
+                <Input
+                  id="projectName"
+                  value={projectName}
+                  onChange={(e) => {
+                    setProjectName(e.target.value)
+                    // Clear validation error when user starts typing
+                    if (validationErrors.projectName) {
+                      setValidationErrors(prev => ({ ...prev, projectName: undefined }))
+                    }
+                  }}
+                  placeholder="MyAndroidApp"
+                  className={validationErrors.projectName ? "border-destructive" : ""}
+                />
+                {validationErrors.projectName && (
+                  <p className="text-sm text-destructive">{validationErrors.projectName}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="packageName">Package Name</Label>
+                <Input
+                  id="packageName"
+                  value={packageName}
+                  onChange={(e) => {
+                    setPackageName(e.target.value)
+                    // Clear validation error when user starts typing
+                    if (validationErrors.packageName) {
+                      setValidationErrors(prev => ({ ...prev, packageName: undefined }))
+                    }
+                  }}
+                  placeholder="com.example.myapp"
+                  className={validationErrors.packageName ? "border-destructive" : ""}
+                />
+                {validationErrors.packageName && (
+                  <p className="text-sm text-destructive">{validationErrors.packageName}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Features Section */}
+            <div className="space-y-4">
+              <h3 className="font-semibold text-lg">Features & Libraries</h3>
+
+              {/* UI Features - Jetpack Compose only */}
+              <div className="space-y-3">
+                <h4 className="font-medium text-sm text-muted-foreground">UI Framework</h4>
+                <div className="flex items-center space-x-2 px-4 py-3 bg-muted rounded-lg">
+                  <Checkbox id="compose" checked={features.compose} disabled />
+                  <Label htmlFor="compose" className="cursor-default">
+                    Jetpack Compose (Default)
+                  </Label>
+                </div>
+              </div>
+
+              {/* Network - Radio Group */}
+              <div className="space-y-3">
+                <h4 className="font-medium text-sm text-muted-foreground">Network Library (Choose One)</h4>
+                <RadioGroup value={networkClientType} onValueChange={(value) => setNetworkLibrary(value as any)}>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="Retrofit" id="network-retrofit" />
+                    <Label htmlFor="network-retrofit" className="cursor-pointer">
+                      Retrofit
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="Ktor" id="network-ktor" />
+                    <Label htmlFor="network-ktor" className="cursor-pointer">
+                      Ktor
+                    </Label>
+                  </div>
+                </RadioGroup>
+              </div>
+
+              {/* Dependency Injection - Radio Group */}
+              <div className="space-y-3">
+                <h4 className="font-medium text-sm text-muted-foreground">Dependency Injection (Choose One)</h4>
+                <RadioGroup value={dependencyInjectionType} onValueChange={(value) => setDiLibrary(value as any)}>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="Hilt" id="di-hilt" />
+                    <Label htmlFor="di-hilt" className="cursor-pointer">
+                      Hilt
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="Koin" id="di-koin" />
+                    <Label htmlFor="di-koin" className="cursor-pointer">
+                      Koin
+                    </Label>
+                  </div>
+                </RadioGroup>
+              </div>
+
+              {/* Annotation Processing - Radio Group */}
+              <div className="space-y-3">
+                <h4 className="font-medium text-sm text-muted-foreground">Annotation Processing (Choose One)</h4>
+                <RadioGroup value={compileTime} onValueChange={(value) => setAnnotationProcessor(value as any)}>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="KAPT" id="compile-kapt" />
+                    <Label htmlFor="compile-kapt" className="cursor-pointer">
+                      KAPT
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="KSP" id="compile-ksp" />
+                    <Label htmlFor="compile-ksp" className="cursor-pointer">
+                      KSP
+                    </Label>
+                  </div>
+                </RadioGroup>
+              </div>
+
+              {/* Other Libraries */}
+              <div className="space-y-3">
+                <h4 className="font-medium text-sm text-muted-foreground">Other Libraries</h4>
+                <div className="space-y-2">
+                  {/* Default libraries - disabled checkboxes */}
+                  <div className="flex items-center space-x-2 px-4 py-2 bg-muted rounded-lg">
+                    <Checkbox id="viewModel" checked={features.viewModel} disabled />
+                    <Label htmlFor="viewModel" className="cursor-default">
+                      ViewModel (Default)
+                    </Label>
+                  </div>
+
+                  <div className="flex items-center space-x-2 px-4 py-3 bg-muted rounded-lg">
+                    <Checkbox id="coroutines" checked={features.coroutines} disabled />
+                    <Label htmlFor="coroutines" className="cursor-default">
+                      Kotlin Coroutines (Default)
+                    </Label>
+                  </div>
+
+                  {/* Optional libraries */}
+                  <div className="flex items-center space-x-2 py-2">
+                    <Checkbox id="room" checked={features.room} onCheckedChange={() => toggleFeature("room")} />
+                    <Label htmlFor="room" className="cursor-pointer">
+                      Room Database
+                    </Label>
+                  </div>
+
+                  <div className={`flex items-center space-x-2 py-2 ${selectedTemplate === "intermediate" ? "px-4 bg-muted rounded-lg" : ""}`}>
+                    <Checkbox
+                      id="navigation"
+                      checked={features.navigation}
+                      disabled={selectedTemplate === "intermediate"}
+                      onCheckedChange={() => toggleFeature("navigation")}
+                    />
+                    <Label htmlFor="navigation" className={selectedTemplate === "intermediate" ? "cursor-default" : "cursor-pointer"}>
+                      Navigation Component{selectedTemplate === "intermediate" ? " (Default)" : ""}
+                    </Label>
+                  </div>
+
+                  <div className="flex items-center space-x-2 py-2">
+                    <Checkbox
+                      id="chucker"
+                      checked={features.chucker}
+                      onCheckedChange={() => toggleFeature("chucker")}
+                    />
+                    <Label htmlFor="chucker" className="cursor-pointer">
+                      Chucker (Network Inspector)
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2 py-2">
+                    <Checkbox
+                      id="glide"
+                      checked={features.glide}
+                      onCheckedChange={() => toggleFeature("glide")}
+                    />
+                    <Label htmlFor="glide" className="cursor-pointer">
+                      Glide
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2 py-2">
+                    <Checkbox
+                      id="timber"
+                      checked={features.timber}
+                      onCheckedChange={() => toggleFeature("timber")}
+                    />
+                    <Label htmlFor="timber" className="cursor-pointer">
+                      Timber (Logging)
+                    </Label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <DialogFooter className="flex-col space-y-4">
+            {/* Error Message Display */}
+            {errorMessage && (
+              <div className="w-full p-3 bg-destructive/10 border border-destructive/20 rounded-md">
+                <p className="text-sm text-destructive mb-2">{errorMessage}</p>
+                {retryCount < 3 && (
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs text-muted-foreground">
+                      {retryCount > 0 && `Retry attempt ${retryCount}/3`}
+                    </p>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleRetry}
+                      disabled={isGenerating}
+                      className="text-xs"
+                    >
+                      {isGenerating ? "Retrying..." : "Try Again"}
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Validation Errors Display */}
+            {(validationErrors.projectName || validationErrors.packageName) && (
+              <div className="w-full space-y-2">
+                {validationErrors.projectName && (
+                  <p className="text-sm text-destructive">• {validationErrors.projectName}</p>
+                )}
+                {validationErrors.packageName && (
+                  <p className="text-sm text-destructive">• {validationErrors.packageName}</p>
+                )}
+              </div>
+            )}
+
+            <div className="flex justify-end space-x-2 w-full">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setIsDialogOpen(false)
+                  clearErrors()
+                }}
+                disabled={isGenerating}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleDownload}
+                disabled={isGenerating}
+                className="min-w-[140px]"
+              >
+                {isGenerating ? "Generating..." : "Download Project"}
+              </Button>
+            </div>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Footer */}
+      <footer className="border-t border-border bg-muted mt-20 sticky top-[100vh]">
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
+            <p>© 2025 Android Template Generator. All rights reserved.</p>
+            <div className="flex gap-6">
+              <a href="#" className="hover:text-foreground transition-colors">
+                Terms of Service
+              </a>
+              <a href="#" className="hover:text-foreground transition-colors">
+                Privacy Policy
+              </a>
+              <a href="#" className="hover:text-foreground transition-colors">
+                Contact Us
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-    </footer>
-  </div>
+      </footer>
+    </div>
   )
 }
